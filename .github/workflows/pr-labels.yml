@@ -1,0 +1,11 @@
+name: PR size label
+on:
+  pull_request:
+    types: [opened, synchronize]
+permissions:
+  pull-requests: write
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PR #${{ github.event.pull_request.number }} changed ${{ github.event.pull_request.changed_files }} files"
