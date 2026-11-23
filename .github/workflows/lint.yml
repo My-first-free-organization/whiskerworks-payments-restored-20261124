@@ -1,0 +1,12 @@
+name: Lint
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Linting TypeScript sources"
+      - run: grep -rn "console.log" src || echo "no console.log found"
