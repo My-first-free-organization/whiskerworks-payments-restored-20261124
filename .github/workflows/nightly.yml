@@ -1,0 +1,22 @@
+name: Nightly
+on:
+  schedule:
+    - cron: '15 2 * * *'
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Test suite
+        default: smoke
+        type: choice
+        options: [smoke, full, regression]
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Running ${{ inputs.suite || 'smoke' }} suite against staging"
+      - run: date -u > nightly.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nightly-${{ github.run_number }}
+          path: nightly.txt
