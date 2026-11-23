@@ -1,0 +1,15 @@
+name: Release
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tar czf payments-${{ github.ref_name }}.tar.gz src docs || tar czf payments-${{ github.ref_name }}.tar.gz .
+      - run: gh release upload ${{ github.ref_name }} payments-${{ github.ref_name }}.tar.gz --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
