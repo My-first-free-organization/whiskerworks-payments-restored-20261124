@@ -1,0 +1,25 @@
+name: CI
+on:
+  push:
+    branches: [main, develop, 'release/**']
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: echo "Building payments service on Node ${{ matrix.node }}"
+      - run: ls -R src || true
+      - run: mkdir -p dist && echo "build ${{ github.sha }}" > dist/build.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-node-${{ matrix.node }}
+          path: dist/
+          retention-days: 7
